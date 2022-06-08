@@ -1,0 +1,3 @@
+[submodule "linux"]
+	path = linux
+	url = https://github.com/mccreary/android_kernel_fxtec_sdm662

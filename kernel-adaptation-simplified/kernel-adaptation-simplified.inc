@@ -75,6 +75,7 @@ BuildRequires:  cross-%{crossbuild}-as
 
 rm -rf %{_tmpdir}
 mkdir -p %{_tmpdir}
+mkdir out
 
 export ARCH=%{kernel_arch}
 export LOCALVERSION="-%{device}"
@@ -93,27 +94,27 @@ defconfig_name=$(basename %{defconfig})
 sh patches/apply-patches.sh %{source_directory}
 %endif
 
-make -C %{source_directory} clean
-make -C %{source_directory} defconfig KBUILD_DEFCONFIG=$defconfig_name
+make -C %{source_directory} O=out clean
+make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
-make -C %{source_directory} -j$(nproc) Image
+make -C %{source_directory} -j$(nproc) O=out Image
 %endif
 
 %if %{build_uImage}
-make -C %{source_directory} -j$(nproc) uImage
+make -C %{source_directory} -j$(nproc) O=out uImage
 %endif
 
 %if %{build_zImage}
-make -C %{source_directory} -j$(nproc) zImage
+make -C %{source_directory} -j$(nproc) O=out zImage
 %endif
 
 %if %{build_modules}
-make -C %{source_directory} -j$(nproc) modules
+make -C %{source_directory} -j$(nproc) O=out modules
 %endif
 
 %if 0%{?devicetrees:1}
-make -C %{source_directory} -j$(nproc) dtbs
+make -C %{source_directory} -j$(nproc) O=out dtbs
 %endif
 
 %install
@@ -121,7 +122,9 @@ make -C %{source_directory} -j$(nproc) dtbs
 mkdir -p %{buildroot}/boot
 
 %if %{build_Image}
-cp %{source_directory}/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/Image
+cp %{source_directory}/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
+cp %{source_directory}/arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/
+cp %{source_directory}/arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/
 %endif
 
 %if %{build_uImage}

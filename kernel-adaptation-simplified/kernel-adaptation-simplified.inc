@@ -122,29 +122,31 @@ make -C %{source_directory} -j$(nproc) O=out dtbs
 mkdir -p %{buildroot}/boot
 
 %if %{build_Image}
-cp %{source_directory}/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
-cp %{source_directory}/arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/
-cp %{source_directory}/arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/
+cp out/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
+cp out/arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/
+cp out/arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/
 %endif
 
 %if %{build_uImage}
-cp %{source_directory}/arch/%{kernel_arch}/boot/uImage %{buildroot}/boot/uImage
+cp out/arch/%{kernel_arch}/boot/uImage %{buildroot}/boot/uImage
 %endif
 
 %if %{build_zImage}
-cp %{source_directory}/arch/%{kernel_arch}/boot/zImage %{buildroot}/boot/zImage
+cp out/arch/%{kernel_arch}/boot/zImage %{buildroot}/boot/zImage
 %endif
 
 %if 0%{?devicetrees:1}
 for dtb in %{devicetrees}; do
 	mkdir -p %{buildroot}/boot/$(basename $(dirname $dtb))
-	cp %{source_directory}/arch/%{kernel_arch}/boot/dts/$dtb %{buildroot}/boot/$dtb
+	cp out/arch/%{kernel_arch}/boot/dts/$dtb %{buildroot}/boot/$dtb
 	cp %{buildroot}/boot/*/*.dtb %{buildroot}/boot/
 done
 %endif
 
-mkdir -p %{buildroot}/lib/modules
-make -C %{source_directory} modules_install INSTALL_MOD_PATH=%{buildroot}
+%if %{build_modules}
+    mkdir -p %{buildroot}/lib/modules
+    make -C %{source_directory} O=out modules_install INSTALL_MOD_PATH=%{buildroot}
+%endif
 
 # Build filelist
 find %{buildroot} ! \( -type d \) | sed -e s,"%{buildroot}",,g> %{_tmpdir}/kernel-adaptation.files

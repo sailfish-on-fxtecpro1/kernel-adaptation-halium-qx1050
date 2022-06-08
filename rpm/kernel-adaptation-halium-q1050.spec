@@ -19,13 +19,13 @@
 %define source_directory linux/
 
 # Build modules
-%define build_modules 0
+##define build_modules 1
 
 # Build Image
 %define build_Image 1
 
 # Apply Patches
-%define apply_patches 0
+##define apply_patches 1
 
 # Build uImage
 ##define build_uImage 1

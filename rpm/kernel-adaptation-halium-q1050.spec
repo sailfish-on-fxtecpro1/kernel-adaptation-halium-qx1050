@@ -1,5 +1,5 @@
 # Device details
-%define device pine64
+%define device halium-qx1050
 
 # Kernel target architecture
 %define kernel_arch arm64
@@ -13,19 +13,19 @@
 %define device_target_cpu aarch64
 
 # Defconfig to pick-up
-%define defconfig config-postmarketos-allwinner.aarch64
+%define defconfig bengal-perf_defconfig
 
 # Linux kernel source directory
 %define source_directory linux/
 
 # Build modules
-%define build_modules 1
+%define build_modules 0
 
 # Build Image
 %define build_Image 1
 
 # Apply Patches
-%define apply_patches 1
+%define apply_patches 0
 
 # Build uImage
 ##define build_uImage 1
@@ -34,6 +34,6 @@
 ##define build_zImage 1
 
 # Build and pick-up the following devicetrees
-%define devicetrees allwinner/sun50i-a64-pinephone-1.0.dtb allwinner/sun50i-a64-pinephone-1.1.dtb allwinner/sun50i-a64-pinephone-1.2.dtb allwinner/sun50i-a64-pinetab.dtb allwinner/sun50i-a64-pinetab-dev.dtb
+##define devicetrees
 
 %include kernel-adaptation-simplified/kernel-adaptation-simplified.inc

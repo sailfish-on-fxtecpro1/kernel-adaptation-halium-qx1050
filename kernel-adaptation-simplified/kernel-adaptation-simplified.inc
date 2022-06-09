@@ -120,7 +120,6 @@ make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" dtbs
 %endif
 
 %install
-
 mkdir -p %{buildroot}/boot
 
 %if %{build_Image}

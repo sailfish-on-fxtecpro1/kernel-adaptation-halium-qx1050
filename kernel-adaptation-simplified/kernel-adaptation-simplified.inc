@@ -96,27 +96,27 @@ defconfig_name=$(basename %{defconfig})
 sh patches/apply-patches.sh %{source_directory}
 %endif
 
-make -C %{source_directory} O=out clean
-make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
+make -C %{source_directory} O=out "KCFLAGS=-Wno-error" clean
+make -C %{source_directory} O=out "KCFLAGS=-Wno-error" defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
-make -C %{source_directory} -j$(nproc) O=out Image
+make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" Image
 %endif
 
 %if %{build_uImage}
-make -C %{source_directory} -j$(nproc) O=out uImage
+make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" uImage
 %endif
 
 %if %{build_zImage}
-make -C %{source_directory} -j$(nproc) O=out zImage
+make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" zImage
 %endif
 
 %if %{build_modules}
-make -C %{source_directory} -j$(nproc) O=out modules
+make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" modules
 %endif
 
 %if 0%{?devicetrees:1}
-make -C %{source_directory} -j$(nproc) O=out dtbs
+make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" dtbs
 %endif
 
 %install

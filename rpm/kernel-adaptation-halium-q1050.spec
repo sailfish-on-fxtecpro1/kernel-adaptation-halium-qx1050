@@ -4,6 +4,7 @@
 # Kernel target architecture
 %define kernel_arch arm64
 
+%define kcflags "KCFLAGS=-Wno-misleading-indentation -Wno-format -Wno-bool-operation -Wno-unused-variable -Wno-unused-result -Wno-pointer-to-int-cast -Wno-unused-value"
 # Crossbuild toolchain to use
 %define crossbuild aarch64
 

@@ -77,6 +77,7 @@ BuildRequires:  cross-%{crossbuild}-as
 
 rm -rf %{_tmpdir}
 mkdir -p %{_tmpdir}
+rm -rf out
 mkdir out
 
 export ARCH=%{kernel_arch}
@@ -93,36 +94,42 @@ defconfig_name=$(basename %{defconfig})
 
 %if 0%{?apply_patches:1}
 #Apply any patches
+echo "***** Applying patches *****"
 sh patches/apply-patches.sh %{source_directory}
 %endif
 
-make -C %{source_directory} O=out "KCFLAGS=-Wno-error" clean
-make -C %{source_directory} O=out "KCFLAGS=-Wno-error" defconfig KBUILD_DEFCONFIG=$defconfig_name
+echo "***** Cleaning *****"
+make -C %{source_directory} O=out %{kcflags} clean
+echo "***** Making defconfig *****"
+make -C %{source_directory} O=out %{kcflags} defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
-make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" Image
+echo "***** Building Image *****"
+make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags} Image
 %endif
 
 %if %{build_uImage}
-make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" uImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} uImage
 %endif
 
 %if %{build_zImage}
-make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" zImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} zImage
 %endif
 
 %if %{build_modules}
-make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" modules
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} modules
 %endif
 
 %if 0%{?devicetrees:1}
-make -C %{source_directory} -j$(nproc) O=out "KCFLAGS=-Wno-error" dtbs
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
 %endif
 
 %install
+echo "***** Installing *****"
 mkdir -p %{buildroot}/boot
 
 %if %{build_Image}
+echo "***** Installing Image *****"
 cp out/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
 cp out/arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/
 cp out/arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/

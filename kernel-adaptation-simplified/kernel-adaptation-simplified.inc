@@ -61,6 +61,7 @@ BuildRequires:  bison
 BuildRequires:  bc
 BuildRequires:  python
 BuildRequires:  openssl
+BuildRequires:  clang
 %if 0%{?crossbuild:1}
 BuildRequires:  cross-%{crossbuild}-gcc
 BuildRequires:  cross-%{crossbuild}-binutils
@@ -77,8 +78,8 @@ BuildRequires:  cross-%{crossbuild}-as
 
 rm -rf %{_tmpdir}
 mkdir -p %{_tmpdir}
-rm -rf out
-mkdir out
+#rm -rf out
+#mkdir out
 
 export ARCH=%{kernel_arch}
 export LOCALVERSION="-%{device}"
@@ -99,29 +100,29 @@ sh patches/apply-patches.sh %{source_directory}
 %endif
 
 echo "***** Cleaning *****"
-make -C %{source_directory} O=out %{kcflags} clean
+make -C %{source_directory} O=out %{kcflags} %{compiler} %{compileropts} clean
 echo "***** Making defconfig *****"
-make -C %{source_directory} O=out %{kcflags} defconfig KBUILD_DEFCONFIG=$defconfig_name
+make -C %{source_directory} O=out %{kcflags} %{compiler} %{compileropts} defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
 echo "***** Building Image *****"
-make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags} Image
+make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags} %{compiler} %{compileropts} Image
 %endif
 
 %if %{build_uImage}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} uImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{compiler} %{compileropts} uImage
 %endif
 
 %if %{build_zImage}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} zImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{compiler} %{compileropts} zImage
 %endif
 
 %if %{build_modules}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} modules
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{compiler} %{compileropts} modules
 %endif
 
 %if 0%{?devicetrees:1}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{compiler} %{compileropts} dtbs
 %endif
 
 %install

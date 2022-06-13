@@ -5,8 +5,13 @@
 %define kernel_arch arm64
 
 %define kcflags "KCFLAGS=-Wno-misleading-indentation -Wno-format -Wno-bool-operation -Wno-unused-variable -Wno-unused-result -Wno-pointer-to-int-cast -Wno-unused-value"
+
+#Compiler to use
+%define compiler CC=clang
+%define compileropts CLANG_TRIPLE=aarch64-linux-gnu-
+
 # Crossbuild toolchain to use
-%define crossbuild aarch64
+##define crossbuild aarch64
 
 # RPM target architecture, remove to leave it unaffected
 # You should have a good reason to change the target architecture

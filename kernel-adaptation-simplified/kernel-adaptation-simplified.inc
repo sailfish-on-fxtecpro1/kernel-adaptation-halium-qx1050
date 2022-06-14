@@ -100,13 +100,13 @@ sh patches/apply-patches.sh %{source_directory}
 %endif
 
 echo "***** Cleaning *****"
-make -C %{source_directory} O=out %{kcflags} %{compiler} %{compileropts} clean
+make -C %{source_directory} O=out clean
 echo "***** Making defconfig *****"
-make -C %{source_directory} O=out %{kcflags} %{compiler} %{compileropts} defconfig KBUILD_DEFCONFIG=$defconfig_name
+make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
 echo "***** Building Image *****"
-make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags} %{compiler} %{compileropts} Image
+make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags} %{compiler} %{compileropts} LD=lld LLVM=1 Image
 %endif
 
 %if %{build_uImage}

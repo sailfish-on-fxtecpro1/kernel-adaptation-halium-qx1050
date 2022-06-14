@@ -11,7 +11,7 @@
 ##define compileropts CLANG_TRIPLE=aarch64-linux-gnu-
 
 # Crossbuild toolchain to use
-##define crossbuild aarch64
+%define crossbuild aarch64
 
 # RPM target architecture, remove to leave it unaffected
 # You should have a good reason to change the target architecture

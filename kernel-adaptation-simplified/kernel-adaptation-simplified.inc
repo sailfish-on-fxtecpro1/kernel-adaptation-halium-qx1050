@@ -106,7 +106,7 @@ make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
 echo "***** Building Image *****"
-make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags} %{compiler} %{compileropts} LD=lld LLVM=1 Image
+make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags} %{compiler} %{compileropts} Image
 %endif
 
 %if %{build_uImage}

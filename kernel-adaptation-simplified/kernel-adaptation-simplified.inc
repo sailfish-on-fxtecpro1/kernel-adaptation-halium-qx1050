@@ -77,8 +77,6 @@ BuildRequires:  cross-%{crossbuild}-as
 
 rm -rf %{_tmpdir}
 mkdir -p %{_tmpdir}
-#rm -rf out
-#mkdir out
 
 export ARCH=%{kernel_arch}
 export LOCALVERSION="-%{device}"

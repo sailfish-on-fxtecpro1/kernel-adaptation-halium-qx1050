@@ -61,7 +61,6 @@ BuildRequires:  bison
 BuildRequires:  bc
 BuildRequires:  python
 BuildRequires:  openssl
-BuildRequires:  clang
 %if 0%{?crossbuild:1}
 BuildRequires:  cross-%{crossbuild}-gcc
 BuildRequires:  cross-%{crossbuild}-binutils

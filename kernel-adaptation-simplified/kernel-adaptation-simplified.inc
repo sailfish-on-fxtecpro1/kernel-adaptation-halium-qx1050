@@ -103,23 +103,23 @@ make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
 echo "***** Building Image *****"
-make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags} %{compiler} %{compileropts} Image
+make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags}  Image
 %endif
 
 %if %{build_uImage}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{compiler} %{compileropts} uImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags}  uImage
 %endif
 
 %if %{build_zImage}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{compiler} %{compileropts} zImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags}  zImage
 %endif
 
 %if %{build_modules}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{compiler} %{compileropts} modules
+make -C %{source_directory} -j$(nproc) O=out %{kcflags}  modules
 %endif
 
 %if 0%{?devicetrees:1}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{compiler} %{compileropts} dtbs
+make -C %{source_directory} -j$(nproc) O=out %{kcflags}  dtbs
 %endif
 
 %install

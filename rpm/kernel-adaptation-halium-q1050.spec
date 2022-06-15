@@ -9,8 +9,8 @@
 #Compiler to use
 ##define compiler CC=clang
 ##define compileropts CLANG_TRIPLE=aarch64-linux-gnu-
-%define compiler
-%define compileropts
+%define compiler %{nil}
+%define compilerots %{nil}
 
 # Crossbuild toolchain to use
 %define crossbuild aarch64

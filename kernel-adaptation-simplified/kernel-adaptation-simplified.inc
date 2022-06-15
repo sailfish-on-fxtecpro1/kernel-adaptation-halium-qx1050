@@ -103,23 +103,23 @@ make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
 echo "***** Building Image *****"
-make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags}  Image
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} Image
 %endif
 
 %if %{build_uImage}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags}  uImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} uImage
 %endif
 
 %if %{build_zImage}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags}  zImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} zImage
 %endif
 
 %if %{build_modules}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags}  modules
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} modules
 %endif
 
 %if 0%{?devicetrees:1}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags}  dtbs
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
 %endif
 
 %install
@@ -128,9 +128,10 @@ mkdir -p %{buildroot}/boot
 
 %if %{build_Image}
 echo "***** Installing Image *****"
-cp out/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
-cp out/arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/
-cp out/arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/
+find . | grep Image
+cp arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
+cp arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/ || true
+cp arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/ || true
 %endif
 
 %if %{build_uImage}

@@ -129,23 +129,23 @@ mkdir -p %{buildroot}/boot
 %if %{build_Image}
 echo "***** Installing Image *****"
 find . | grep Image
-cp arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
-cp arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/ || true
-cp arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/ || true
+cp linux/out/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
+cp linux/out/arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/ || true
+cp linux/out/arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/ || true
 %endif
 
 %if %{build_uImage}
-cp out/arch/%{kernel_arch}/boot/uImage %{buildroot}/boot/uImage
+cp linux/out/out/arch/%{kernel_arch}/boot/uImage %{buildroot}/boot/uImage
 %endif
 
 %if %{build_zImage}
-cp out/arch/%{kernel_arch}/boot/zImage %{buildroot}/boot/zImage
+cp linux/out/out/arch/%{kernel_arch}/boot/zImage %{buildroot}/boot/zImage
 %endif
 
 %if 0%{?devicetrees:1}
 for dtb in %{devicetrees}; do
 	mkdir -p %{buildroot}/boot/$(basename $(dirname $dtb))
-	cp out/arch/%{kernel_arch}/boot/dts/$dtb %{buildroot}/boot/$dtb
+	cp linux/out/arch/%{kernel_arch}/boot/dts/$dtb %{buildroot}/boot/$dtb
 	cp %{buildroot}/boot/*/*.dtb %{buildroot}/boot/
 done
 %endif

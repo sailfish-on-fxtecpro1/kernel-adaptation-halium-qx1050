@@ -159,3 +159,4 @@ done
 find %{buildroot} ! \( -type d \) | sed -e s,"%{buildroot}",,g> %{_tmpdir}/kernel-adaptation.files
 
 %files -f %{_tmpdir}/kernel-adaptation.files
+

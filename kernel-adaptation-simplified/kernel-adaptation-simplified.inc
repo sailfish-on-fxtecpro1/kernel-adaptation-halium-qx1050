@@ -82,7 +82,7 @@ mkdir -p %{_tmpdir}
 
 export ARCH=%{kernel_arch}
 export LOCALVERSION="-%{device}"
-export DTC_EXT=%(echo $PWD)/kernel-adaptation-simplified/dtc_ext
+#export DTC_EXT=%(echo $PWD)/kernel-adaptation-simplified/dtc_ext
 
 %if 0%{?crossbuild:1}
 export CROSS_COMPILE=%{crossbuild}-meego-linux-gnu-
@@ -122,14 +122,11 @@ echo "***** Building Modules *****"
 make -C %{source_directory} -j$(nproc) O=out %{kcflags} modules
 %endif
 
-%if 0%{?devicetrees:1}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
-%endif
-
 %if %{build_dtboimg}
+echo "***** Building DTBS *****"
 pwd
-find .
-python2 kernel-adaptation-simplified/mkdtboimg.py create linux/out/dtbo.img %{source_directory}/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtb}
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{deviceinfo_dtb}
+python2 kernel-adaptation-simplified/mkdtboimg.py create linux/out/dtbo.img %{source_directory}/out/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtb}
 %endif
 
 %install

@@ -104,17 +104,17 @@ make -C %{source_directory} O=out clean
 echo "***** Making defconfig *****"
 make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
-%if %{build_Image}
+%if 0%{?build_Image:1}
 echo "***** Building Image *****"
 make -C %{source_directory} -j$(nproc) O=out %{kcflags}
 %endif
 
-%if %{build_modules}
+%if 0%{?build_modules:1}
 echo "***** Building Modules *****"
 make -C %{source_directory} -j$(nproc) O=out %{kcflags} modules
 %endif
 
-%if %{build_dtboimg}
+%if 0%{?build_dtboimage:1}
 echo "***** Building DTBS *****"
 pwd
 make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs

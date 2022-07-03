@@ -124,7 +124,7 @@ echo "***** Building DTBO Image *****"
 python2 kernel-adaptation-simplified/mkdtboimg.py create linux/out/dtbo.img %{source_directory}/out/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtbo}
 %endif
 
-ls "out/arch/%{kernel_arch}/boot/"*Image*
+ls -lh %{source_directory}/out/arch/%{kernel_arch}/boot/*Image*
 mkdir -p %{buildroot}/boot
 
 echo "***** Building Boot Image *****"

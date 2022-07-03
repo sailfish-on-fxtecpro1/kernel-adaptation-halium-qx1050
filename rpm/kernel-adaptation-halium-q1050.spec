@@ -35,17 +35,13 @@
 # Apply Patches
 %define apply_patches 1
 
-# Build uImage
-##define build_uImage 1
-
-# Build zImage
-##define build_zImage 1
+##define build_dtboimg 1
 
 # Build and pick-up the following devicetrees
 ##define devicetrees
 
 #Device Info
-%define build_dtboimg 1
+
 %define deviceinfo_dtb vendor/qcom/bengal.dtb
 %define deviceinfo_dtbo vendor/qcom/bengal-idp-overlay.dtbo
 %define deviceinfo_flash_pagesize 4096

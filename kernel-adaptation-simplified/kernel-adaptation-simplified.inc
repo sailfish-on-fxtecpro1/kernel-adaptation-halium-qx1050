@@ -106,15 +106,7 @@ make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if %{build_Image}
 echo "***** Building Image *****"
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} Image
-%endif
-
-%if %{build_uImage}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} uImage
-%endif
-
-%if %{build_zImage}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} zImage
+make -C %{source_directory} -j$(nproc) O=out %{kcflags}
 %endif
 
 %if %{build_modules}
@@ -125,28 +117,51 @@ make -C %{source_directory} -j$(nproc) O=out %{kcflags} modules
 %if %{build_dtboimg}
 echo "***** Building DTBS *****"
 pwd
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
 make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{deviceinfo_dtb}
-python2 kernel-adaptation-simplified/mkdtboimg.py create linux/out/dtbo.img %{source_directory}/out/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtb}
+
+echo "***** Building DTBO Image *****"
+python2 kernel-adaptation-simplified/mkdtboimg.py create linux/out/dtbo.img %{source_directory}/out/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtbo}
 %endif
+
+ls "out/arch/%{kernel_arch}/boot/"*Image*
+mkdir -p %{buildroot}/boot
+
+echo "***** Building Boot Image *****"
+KERNEL=%{source_directory}/out/arch/%{kernel_arch}/boot/Image.gz
+DTB=%{source_directory}/out/arch/%{kernel_arch}/boot/%{deviceinfo_dtb}
+EXTRA_ARGS=""
+RAMDISK=kernel-adpatation-simplified/halium-boot-ramdisk.img
+OUT=%{buildroot}/boot/boot.img
+
+if [ "%{deviceinfo_bootimg_header_version}" -le 2 ]; then
+    EXTRA_ARGS+=" --base %{deviceinfo_flash_offset_base} --kernel_offset %{deviceinfo_flash_offset_kernel} --ramdisk_offset %{deviceinfo_flash_offset_ramdisk} --second_offset %{deviceinfo_flash_offset_second} --tags_offset %{deviceinfo_flash_offset_tags} --pagesize %{deviceinfo_flash_pagesize}"
+fi
+
+if [ "%{deviceinfo_bootimg_header_version}" -eq 2 ]; then
+    EXTRA_ARGS+=" --dtb $DTB --dtb_offset %{deviceinfo_flash_offset_dtb}"
+fi
+
+python ./kernel-adpatation-simplified/mkbootimg.py --kernel "$KERNEL" --ramdisk "$RAMDISK" --cmdline "%{deviceinfo_kernel_cmdline}" --header_version %{deviceinfo_bootimg_header_version} -o "$OUT" --os_version %{deviceinfo_bootimg_os_version} --os_patch_level %{deviceinfo_bootimg_os_patch_level} $EXTRA_ARGS
+
+if [ -n "%{deviceinfo_bootimg_partition_size}" ]; then
+    EXTRA_ARGS=""
+    [ -f "$HERE/rsa4096_boot.pem" ] && EXTRA_ARGS=" --key $HERE/rsa4096_boot.pem --algorithm SHA256_RSA4096"
+    python2 "./kernel-adpatation-simplified/avbtool" add_hash_footer --image "$OUT" --partition_name boot --partition_size %{deviceinfo_bootimg_partition_size} $EXTRA_ARGS
+
+    if [ -n "$deviceinfo_bootimg_append_vbmeta" ] && $deviceinfo_bootimg_append_vbmeta; then
+        python2 "./kernel-adpatation-simplified/avbtool" append_vbmeta_image --image "$OUT" --partition_size "%{deviceinfo_bootimg_partition_size}" --vbmeta_image "$TMPDOWN/vbmeta.img"
+    fi
+fi
 
 %install
 echo "***** Installing *****"
-mkdir -p %{buildroot}/boot
 
 %if %{build_Image}
 echo "***** Installing Image *****"
 find . | grep Image
 cp linux/out/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
-cp linux/out/arch/%{kernel_arch}/boot/dtb.img %{buildroot}/boot/ || true
-cp linux/out/arch/%{kernel_arch}/boot/dtbo.img %{buildroot}/boot/ || true
-%endif
-
-%if %{build_uImage}
-cp linux/out/out/arch/%{kernel_arch}/boot/uImage %{buildroot}/boot/uImage
-%endif
-
-%if %{build_zImage}
-cp linux/out/out/arch/%{kernel_arch}/boot/zImage %{buildroot}/boot/zImage
+cp linux/out/dtbo.img %{buildroot}/boot/ || true
 %endif
 
 %if 0%{?devicetrees:1}
@@ -167,4 +182,3 @@ done
 find %{buildroot} ! \( -type d \) | sed -e s,"%{buildroot}",,g> %{_tmpdir}/kernel-adaptation.files
 
 %files -f %{_tmpdir}/kernel-adaptation.files
-

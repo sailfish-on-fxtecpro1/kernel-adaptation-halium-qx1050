@@ -126,7 +126,7 @@ mkdir -p %{buildroot}/boot
 
 echo "***** Building Boot Image *****"
 KERNEL=%{source_directory}/out/arch/%{kernel_arch}/boot/Image.gz
-DTB=%{source_directory}/out/arch/%{kernel_arch}/boot/%{deviceinfo_dtb}
+DTB=%{source_directory}/out/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtb}
 EXTRA_ARGS=""
 RAMDISK=kernel-adaptation-simplified/halium-boot-ramdisk.img
 OUT=%{buildroot}/boot/boot.img

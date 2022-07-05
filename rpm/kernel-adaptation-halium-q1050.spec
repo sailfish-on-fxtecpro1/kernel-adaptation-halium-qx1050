@@ -27,7 +27,7 @@
 %define source_directory linux/
 
 # Build modules
-##define build_modules 1
+%define build_modules 1
 
 # Build Image
 %define build_Image 1

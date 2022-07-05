@@ -122,14 +122,13 @@ python2 kernel-adaptation-simplified/mkdtboimg.py create linux/out/dtbo.img %{so
 %endif
 
 ls -lh %{source_directory}/out/arch/%{kernel_arch}/boot/*Image*
-mkdir -p %{buildroot}/boot
 
 echo "***** Building Boot Image *****"
 KERNEL=%{source_directory}/out/arch/%{kernel_arch}/boot/Image.gz
 DTB=%{source_directory}/out/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtb}
 EXTRA_ARGS=""
 RAMDISK=kernel-adaptation-simplified/halium-boot-ramdisk.img
-OUT=%{buildroot}/boot/boot.img
+OUT=%{source_directory}/out/arch/%{kernel_arch}/boot/boot.img
 
 if [ "%{deviceinfo_bootimg_header_version}" -le 2 ]; then
     EXTRA_ARGS+=" --base %{deviceinfo_flash_offset_base} --kernel_offset %{deviceinfo_flash_offset_kernel} --ramdisk_offset %{deviceinfo_flash_offset_ramdisk} --second_offset %{deviceinfo_flash_offset_second} --tags_offset %{deviceinfo_flash_offset_tags} --pagesize %{deviceinfo_flash_pagesize}"
@@ -153,12 +152,14 @@ fi
 
 %install
 echo "***** Installing *****"
+mkdir -p %{buildroot}/boot
 
 %if %{build_Image}
 echo "***** Installing Image *****"
 find . | grep Image
-cp linux/out/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
-cp linux/out/dtbo.img %{buildroot}/boot/ || true
+cp %{source_directory}linux/out/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
+cp %{source_directory}/out/dtbo.img %{buildroot}/boot/ || true
+cp %{source_directory}/out/arch/%{kernel_arch}/boot/boot.img %{buildroot}/boot/ || true
 %endif
 
 %if 0%{?devicetrees:1}
@@ -168,7 +169,6 @@ for dtb in %{devicetrees}; do
 	cp %{buildroot}/boot/*/*.dtb %{buildroot}/boot/
 done
 %endif
-
 
 %if %{build_modules}
     mkdir -p %{buildroot}/lib/modules

@@ -107,6 +107,8 @@ make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 %if 0%{?build_Image:1}
 echo "***** Building Image *****"
 make -C %{source_directory} -j$(nproc) O=out %{kcflags}
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
+make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{deviceinfo_dtb}
 %endif
 
 %if 0%{?build_modules:1}
@@ -115,11 +117,6 @@ make -C %{source_directory} -j$(nproc) O=out %{kcflags} modules
 %endif
 
 %if 0%{?build_dtboimage:1}
-echo "***** Building DTBS *****"
-pwd
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{deviceinfo_dtb}
-
 echo "***** Building DTBO Image *****"
 python2 kernel-adaptation-simplified/mkdtboimg.py create linux/out/dtbo.img %{source_directory}/out/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtbo}
 %endif

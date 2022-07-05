@@ -157,7 +157,8 @@ mkdir -p %{buildroot}/boot
 %if %{build_Image}
 echo "***** Installing Image *****"
 find . | grep Image
-cp %{source_directory}linux/out/arch/%{kernel_arch}/boot/Image %{buildroot}/boot/
+find %{source_directory}/out/arch/%{kernel_arch}/boot/
+cp %{source_directory}/out/arch/%{kernel_arch}/boot/*Image* %{buildroot}/boot/
 cp %{source_directory}/out/dtbo.img %{buildroot}/boot/ || true
 cp %{source_directory}/out/arch/%{kernel_arch}/boot/boot.img %{buildroot}/boot/ || true
 %endif

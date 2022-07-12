@@ -107,8 +107,8 @@ make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 %if 0%{?build_Image:1}
 echo "***** Building Image *****"
 make -C %{source_directory} -j$(nproc) O=out %{kcflags}
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
-make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{deviceinfo_dtb}
+#make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
+#make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{deviceinfo_dtb}
 %endif
 
 %if 0%{?build_modules:1}

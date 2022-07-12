@@ -82,7 +82,7 @@ mkdir -p %{_tmpdir}
 
 export ARCH=%{kernel_arch}
 export LOCALVERSION="-%{device}"
-export DTC_EXT=%(echo $PWD)/kernel-adaptation-simplified/dtc_ext
+export DTC_EXT=%{source_directory}/../kernel-adaptation-simplified/dtc_ext
 
 %if 0%{?crossbuild:1}
 export CROSS_COMPILE=%{crossbuild}-meego-linux-gnu-

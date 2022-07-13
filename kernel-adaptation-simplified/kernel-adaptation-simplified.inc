@@ -106,6 +106,8 @@ make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 %if 0%{?build_Image:1}
 echo "***** Building Image *****"
 echo %{buildroot}
+echo %{_builddir}/%{name}-%{version}/
+ls -lh %{_builddir}/%{name}-%{version}/
 
 export DTC_EXT=../../kernel-adaptation-simplified/dtc_ext
 make -C %{source_directory} -j$(nproc) O=out %{kcflags}

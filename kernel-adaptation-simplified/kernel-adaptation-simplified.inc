@@ -108,10 +108,6 @@ echo "***** Building Image *****"
 echo %{buildroot}
 echo %{_builddir}/%{name}-%{version}/
 
-cp %{_builddir}/%{name}-%{version}/kernel-adaptation-simplified/dtc_ext %{_tmpdir}/
-export DTC_EXT=%{_tmpdir}/dtc_ext
-file $DTC_EXT
-
 make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags}
 #make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
 #make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{deviceinfo_dtb}

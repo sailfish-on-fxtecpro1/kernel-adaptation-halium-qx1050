@@ -100,17 +100,13 @@ sh patches/apply-patches.sh %{source_directory}
 
 echo "***** Cleaning *****"
 make -C %{source_directory} O=out clean
+
 echo "***** Making defconfig *****"
 make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if 0%{?build_Image:1}
 echo "***** Building Image *****"
-echo %{buildroot}
-echo %{_builddir}/%{name}-%{version}/
-
 make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags}
-#make -C %{source_directory} -j$(nproc) O=out %{kcflags} dtbs
-#make -C %{source_directory} -j$(nproc) O=out %{kcflags} %{deviceinfo_dtb}
 %endif
 
 %if 0%{?build_modules:1}
@@ -158,10 +154,7 @@ mkdir -p %{buildroot}/boot
 
 %if %{build_Image}
 echo "***** Installing Image *****"
-find . | grep Image
-find %{source_directory}/out/arch/%{kernel_arch}/boot/
 cp %{source_directory}/out/arch/%{kernel_arch}/boot/*Image* %{buildroot}/boot/
-cp %{source_directory}/out/dtbo.img %{buildroot}/boot/ || true
 cp %{source_directory}/out/arch/%{kernel_arch}/boot/dts/%{deviceinfo_dtb} %{buildroot}/boot/ || true
 cp %{source_directory}/out/arch/%{kernel_arch}/boot/boot.img %{buildroot}/boot/ || true
 %endif
@@ -174,6 +167,10 @@ for dtb in %{devicetrees}; do
 done
 %endif
 
+%if 0%{?build_dtboimage:1}
+cp %{source_directory}/out/dtbo.img %{buildroot}/boot/ || true
+%endif
+
 %if %{build_modules}
     mkdir -p %{buildroot}/lib/modules
     make -C %{source_directory} O=out modules_install INSTALL_MOD_PATH=%{buildroot}
@@ -181,5 +178,12 @@ done
 
 # Build filelist
 find %{buildroot} ! \( -type d \) | sed -e s,"%{buildroot}",,g> %{_tmpdir}/kernel-adaptation.files
+
+%post
+# This oneshot is enabled only during package upgrades, as initial
+# installation is done when we flash device.
+if [ $1 -ne 1 ] ; then
+  add-preinit-oneshot /var/lib/platform-updates/flash-bootimg.sh || :
+fi
 
 %files -f %{_tmpdir}/kernel-adaptation.files

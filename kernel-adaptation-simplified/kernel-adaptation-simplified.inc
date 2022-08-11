@@ -62,6 +62,7 @@ BuildRequires:  bc
 BuildRequires:  python
 BuildRequires:  openssl
 #!BuildIgnore:  rpmlint-mini
+BuildRequires:  dtc
 
 %if 0%{?crossbuild:1}
 BuildRequires:  cross-%{crossbuild}-gcc
@@ -106,7 +107,7 @@ make -C %{source_directory} O=out defconfig KBUILD_DEFCONFIG=$defconfig_name
 
 %if 0%{?build_Image:1}
 echo "***** Building Image *****"
-make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags}
+DTC_EXT=/usr/bin/dtc make -C %{source_directory} -j$(nproc) O=out V=1 %{kcflags}
 %endif
 
 %if 0%{?build_modules:1}

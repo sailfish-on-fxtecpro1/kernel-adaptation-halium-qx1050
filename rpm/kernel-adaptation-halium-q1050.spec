@@ -4,7 +4,7 @@
 # Kernel target architecture
 %define kernel_arch arm64
 
-%define kcflags "KCFLAGS=-Wno-misleading-indentation -Wno-format -Wno-bool-operation -Wno-unused-variable -Wno-unused-result -Wno-pointer-to-int-cast -Wno-unused-value -Wno-sequence-point -Wno-return-type -Wno-implicit-int -Wno-bool-compare -Wno-maybe-uninitialized"
+%define kcflags "KCFLAGS=-Wno-misleading-indentation -Wno-format -Wno-bool-operation -Wno-unused-variable -Wno-unused-result -Wno-pointer-to-int-cast -Wno-unused-value -Wno-sequence-point -Wno-return-type -Wno-implicit-int -Wno-bool-compare -Wno-maybe-uninitialized -Wno-memset-elt-size"
 
 #Compiler to use
 ##define compiler CC=clang
@@ -35,7 +35,7 @@
 # Apply Patches
 %define apply_patches 1
 
-##define build_dtboimg 1
+%define build_dtboimage 1
 
 # Build and pick-up the following devicetrees
 ##define devicetrees

@@ -1,13 +1,15 @@
 diff --git a/drivers/input/keyboard/aw9523/aw9523b.c b/drivers/input/keyboard/aw9523/aw9523b.c
-index e381d503aadf..73e54e9898f3 100755
+index e381d503aadf..af9a13278ff5 100755
 --- a/drivers/input/keyboard/aw9523/aw9523b.c
 +++ b/drivers/input/keyboard/aw9523/aw9523b.c
-@@ -1687,9 +1687,8 @@ static void gpio_keys_gpio_report_event(struct gpio_button_data *bdata)
+@@ -1687,9 +1687,10 @@ static void gpio_keys_gpio_report_event(struct gpio_button_data *bdata)
  				AW9523_LOG("(released) KF_FN \n");
  				g_physical_modifiers &= ~KF_FN;
  			}
 -		} else {
 -			input_event(input, type, *bdata->code, state);
++			//Make KEY_FN emit KEY_FN_B just for kabouic
++			*bdata->code = KEY_FN_B;
  		}
 +		input_event(input, type, *bdata->code, state);
  	}

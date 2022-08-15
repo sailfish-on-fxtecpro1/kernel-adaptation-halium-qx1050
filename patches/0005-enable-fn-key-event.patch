@@ -8,8 +8,8 @@ index e381d503aadf..af9a13278ff5 100755
  			}
 -		} else {
 -			input_event(input, type, *bdata->code, state);
-+			//Make KEY_FN emit KEY_FN_B just for kabouic
-+			*bdata->code = KEY_FN_B;
++			//Make KEY_FN emit KEY_RIGHTMETA just for kabouic
++			*bdata->code = KEY_RIGHTMETA;
  		}
 +		input_event(input, type, *bdata->code, state);
  	}

@@ -51,7 +51,7 @@
 %define deviceinfo_flash_offset_second 0x00f00000
 %define deviceinfo_flash_offset_tags 0x00000100
 %define deviceinfo_flash_offset_dtb 0x01f00000
-%define deviceinfo_kernel_cmdline console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0x4a90000 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 buildvariant=userdebug console=tty0
+%define deviceinfo_kernel_cmdline console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0x4a90000 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 buildvariant=userdebug console=tty0 init=/sbin/preinit
 %define deviceinfo_bootimg_os_version 11
 %define deviceinfo_bootimg_os_patch_level 2021-10-01
 %define deviceinfo_bootimg_header_version 2

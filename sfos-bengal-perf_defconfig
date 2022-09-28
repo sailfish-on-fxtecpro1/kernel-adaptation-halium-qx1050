@@ -693,4 +693,3 @@ CONFIG_CORESIGHT_REMOTE_ETM=y
 CONFIG_CORESIGHT_TGU=y
 
 CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder,puddlejumper,vndpuddlejumper,hwpuddlejumper"
-CONFIG_PSTORE=y

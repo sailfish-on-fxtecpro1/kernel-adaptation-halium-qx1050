@@ -45,8 +45,6 @@ Name:           kernel-adaptation-%{rpm_device}
 Summary:        Kernel adaptation for %{rpm_device}
 Group:          System
 License:        GPLv2
-Version:        2.6
-Release:        1
 Provides:       kernel
 Source:         %{name}-%{version}.tar.bz2
 Requires(pre):  kmod >= 9

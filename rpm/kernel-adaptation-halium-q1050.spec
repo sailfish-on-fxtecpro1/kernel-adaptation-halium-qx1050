@@ -58,4 +58,7 @@
 %define deviceinfo_bootimg_partition_size 100663296
 %define deviceinfo_rootfs_image_sector_size 4096
 
+Version:        4.19.157
+Release:        1
+
 %include kernel-adaptation-simplified/kernel-adaptation-simplified.inc

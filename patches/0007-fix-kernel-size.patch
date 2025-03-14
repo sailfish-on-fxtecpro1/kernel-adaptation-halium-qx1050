@@ -1,0 +1,51 @@
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index 86a57e2fa9af..abb567f05d94 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -76,10 +76,6 @@ jiffies = jiffies_64;
+ #define TRAMP_TEXT
+ #endif
+ 
+-#define RTIC_BSS					\
+-	. = ALIGN(PAGE_SIZE);				\
+-	KEEP(*(.bss.rtic));			\
+-	. = ALIGN(PAGE_SIZE);				\
+ /*
+  * The size of the PE/COFF section that covers the kernel image, which
+  * runs from stext to _edata, must be a round multiple of the PE/COFF
+@@ -261,9 +257,6 @@ SECTIONS
+ 
+ 	HEAD_SYMBOLS
+ 
+-	.bss : {			/* bss segment		*/
+-         RTIC_BSS
+-	}
+ }
+ 
+ /*
+diff --git a/include/linux/init.h b/include/linux/init.h
+index bc719c7da735..586dd187e22f 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -322,8 +322,6 @@ void __init parse_early_options(char *cmdline);
+ /* Data marked not to be saved by software suspend */
+ #define __nosavedata __section(.data..nosave)
+ 
+-#define __rticdata  __attribute__((section(".bss.rtic")))
+-
+ #ifdef MODULE
+ #define __exit_p(x) x
+ #else
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 305890cab97b..d4e1e63a55d6 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -100,7 +100,7 @@
+ #include "audit.h"
+ #include "avc_ss.h"
+ 
+-struct selinux_state selinux_state __rticdata;
++struct selinux_state selinux_state;
+ 
+ /* SECMARK reference count */
+ static atomic_t selinux_secmark_refcount = ATOMIC_INIT(0);

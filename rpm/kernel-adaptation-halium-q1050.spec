@@ -4,7 +4,7 @@
 # Kernel target architecture
 %define kernel_arch arm64
 
-%define kcflags "KCFLAGS=-Wno-misleading-indentation -Wno-format -Wno-bool-operation -Wno-unused-variable -Wno-unused-result -Wno-pointer-to-int-cast -Wno-unused-value -Wno-sequence-point -Wno-return-type -Wno-implicit-int -Wno-bool-compare -Wno-maybe-uninitialized -Wno-memset-elt-size -Wno-array-compare"
+%define kcflags "KCFLAGS=-Wno-misleading-indentation -Wno-format -Wno-bool-operation -Wno-unused-variable -Wno-unused-result -Wno-pointer-to-int-cast -Wno-unused-value -Wno-sequence-point -Wno-return-type -Wno-implicit-int -Wno-bool-compare -Wno-maybe-uninitialized -Wno-memset-elt-size -Wno-array-compare -Wno-dangling-pointer"
 
 #Compiler to use
 ##define compiler CC=clang
